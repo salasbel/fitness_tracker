@@ -3,24 +3,41 @@ const { client } = require('./client');
 // addActivityToRoutine
 // addActivityToRoutine({ routineId, activityId, count, duration })
 // create a new routine_activity, and return it
+// async function addActivityToRoutine({
+//     routineId, 
+//     activityId, 
+//     count, 
+//     duration
+// })  {
+//     try {
+//         const { rows: [routine_activity] } = await client.query(`
+//         INSERT INTRO routine_activities("routineId", "activityId", count, duration)
+//         VALUES($1, $2, $3, $4)
+//         RETURNING *;
+//         `, [routineId, activityId, count, duration]);
+//             return routine_activity;
+//     } catch (error) {
+//         throw error;
+//     } 
+// };
+
 async function addActivityToRoutine({
-    routineId, 
-    activityId, 
-    count, 
+    routineId,
+    activityId,
+    count,
     duration
-})  {
+}) {
     try {
         const { rows: [routine_activity] } = await client.query(`
-        INSERT INTRO routine_activities("routineId", "activityId", count, duration)
+        INSERT INTO routine_activities("routineId", "activityId", count, duration) 
         VALUES($1, $2, $3, $4)
         RETURNING *;
-        `, [routineId, activityId, count, duration]);
-            return routine_activity;
+      `, [routineId, activityId, count, duration]);
+        return routine_activity;
     } catch (error) {
         throw error;
-    } 
+    }
 };
-
 
 // getRoutineActivitiesByRoutine
 
@@ -32,7 +49,7 @@ async function getRoutineActivitiesByRoutine({ id: routineId }) {
             SELECT "activityId" FROM routine_activities 
             WHERE "routineId=${routineId};
         `);
-        return rows;
+        return routine_activity;
     } catch (error) {
         throw error;
     }
@@ -42,7 +59,7 @@ async function getRoutineActivitiesByRoutine({ id: routineId }) {
 async function getRoutineActivitiesByRoutineId(routineId) {
     try {
         const { rows: [routine_activity]} = await client.query(`
-            SELECT * FROM routine_activities 
+            SELECT "activityId" FROM routine_activities 
             WHERE "routineId"=${routineId};
         `);
         return routine_activity;
